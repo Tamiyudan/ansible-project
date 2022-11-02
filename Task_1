@@ -1,0 +1,37 @@
+
+
+- name: Create Static Web Site
+  hosts: centos    
+  user: root 
+  tasks: 
+  - name: install apache
+    yum:
+      name: httpd
+      state: latest
+  - name: start httpd
+    service:
+      name: httpd
+      state: started
+      enabled: yes
+  - name: install epel    
+    yum:
+      name:
+      - epel-release
+      - yum-utils
+      state: latest
+  - name: install unzip
+    package:
+      name: unzip
+      state: present
+  - name: Unarchive a file that needs to be downloaded (added in 2.0)
+    unarchive:
+      src: https://www.free-css.com/assets/files/free-css-templates/download/page283/ninom.zip
+      dest: /var/www/html/
+      remote_src: yes
+
+
+  - name: custom index.html
+    ansible.builtin.copy:
+        dest: /var/www/html/index.html
+        content: |
+            https://www.free-css.com/free-css-templates/page283/ninom
